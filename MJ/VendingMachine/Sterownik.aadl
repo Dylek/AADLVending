@@ -1,0 +1,34 @@
+package Sterownik
+public
+	
+	
+	System VendingMachineSterownik	
+	end VendingMachineSterownik;
+	System implementation VendingMachineSterownik.with_Devices
+		subcomponents
+			sys_fotokomorka: device Fotokomorka;
+			sys_przyciski_zew: device Panel_przyciski;
+			sys_wyswietlacz: device Panel_wyswietlacz;
+			sys_liczydlo: device Liczydlo;
+		connections
+		
+	end VendingMachineSterownik.with_Devices;
+	
+	process Kontroler
+		features
+			
+	end Kontroler;
+	process implementation Kont
+	device Fotokomorka;		
+	end Fotokomorka;
+	device Liczydlo
+		
+	end Liczydlo;
+	device Panel_wyswietlacz
+		
+	end Panel_wyswietlacz;
+	
+	device Panel_przyciski
+		
+	end Panel_przyciski;
+end Sterownik;
