@@ -21,7 +21,7 @@ public
 			motion_conn: port sys_fotokomorka.motion_out -> sys_controller.motion_in;
 			message_conn:port sys_controller.wiadomosc_out->sys_wyswietlacz.wiadomosc_in;
 			sum_of_money_conn:port sys_liczydlo.sum_of_money_out->sys_controller.sum_of_money_in;
-			
+			reszta_conn:port sys_controller.reszta_out->sys_liczydlo.reszta_in;
 			wysun_conn:port sys_controller.wysun_produkt_out->sys_podajnik.wysun_produkt_in;
 			przyciski_conn:port sys_przyciski.wcisnieto_out->sys_controller.wcisnieto_in;
 			
@@ -39,6 +39,7 @@ public
 			
 			motion_in: in event port;
 			sum_of_money_in: in data port Base_Types::Float;
+			reszta_out:out data port Base_Types::Float;
 			wiadomosc_out:out data port Base_Types::String;			
 			wysun_produkt_out:out data port Base_Types::Integer_8;
 			wcisnieto_in:in data port Base_Types::Integer_8;
@@ -54,18 +55,171 @@ public
 			this_thread_ReadMotion:thread ReadMotion.impl;
 			this_thread_ReadButtons:thread ReadButtons.impl;
 			this_thread_ControlRules:thread ControlRules.impl;
+			this_thread_SendReszta:thread SendReszta.impl;
+			
+			
+			this_thread_motion:thread MotionThread.impl;
+			this_thread_deal:thread PayThread.impl;
+			this_thead_give:thread GiveAwayThread.impl;
+			this_thread_view:thread ViewThread.impl;
+			
+			
 		connections
+						
+			
+			
+			
+			
 			motion_thread_conn:port motion_in->this_thread_ReadMotion.motion_in;
 			message_thread_conn:port this_thread_SendMessage.message_out->wiadomosc_out;
 			wysun_thread_conn:port this_thread_SendWysun.wysun_out->wysun_produkt_out;
 			buttons_thread_conn:port wcisnieto_in->this_thread_ReadButtons.button_in;
 			sum_thread_conn: port sum_of_money_in ->this_thread_ReadSum.sum_in;
+			reszta_thread_conn: port this_thread_SendReszta.reszta_out-> reszta_out;
 			
-			 control_conn:port this_thread_ReadMotion.motion_out->
+			motion_rules: port this_thread_ReadMotion.motion_out->this_thread_ControlRules.motion_in;
+			reszta_rules: port this_thread_ControlRules.reszta_out->this_thread_SendReszta.reszta_in;
+			wiadomosc_rules: port this_thread_ControlRules.wiadomosc_out->this_thread_SendMessage.message_in;
+			sum_rules: port this_thread_ReadSum.sum_out ->this_thread_ControlRules.sum_in;
+			przyciski_rules:port this_thread_ReadButtons.button_out ->  this_thread_ControlRules.wcisnieto_in;
+			wysun_rules: port this_thread_ControlRules.wysun_produkt_out->this_thread_SendWysun.wysun_in;
+			
 	end Controller.with_threads;
 	
-	thread ControlRules
+	
+	subprogram Give_change		
+	end Give_change;
+	subprogram implementation Give_change.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"aaaa tutaj nazwy funkcji w tym pliku";
+			source_text				=>("vendingmachine.c");
+	end Give_change.impl;
+	
+	
+	subprogram Give_product
+	end Give_product;
+	subprogram implementation Give_product.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end Give_product.impl;
+	
+	
+	subprogram Has_Fallen
+	end Has_Fallen;
+	subprogram implementation Has_Fallen.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end Has_Fallen.impl;
+	
+		subprogram View_message
+	end View_message;
+	subprogram implementation View_message.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end View_message.impl;
+	
+		subprogram Pressed_button
+	end Pressed_button;
+	subprogram implementation Pressed_button.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end Pressed_button.impl;
+	
+	subprogram Pay_deal
+	end Pay_deal;
+	subprogram implementation Pay_deal.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end Pay_deal.impl;
+	
+		subprogram Calculate_change
+	end Calculate_change;
+	subprogram implementation Calculate_change.impl
+		properties
+			Source_Language			=>(C);
+			Source_Name				=>"co tutaj";
+			source_text				=>("vendingmachine.c");
+	end Calculate_change.impl;
+	
+	
+	thread MotionThread		
+	end MotionThread;
+	thread implementation MotionThread.impl
+		calls
+			Main: {
+				has_fallen_call: subprogram Has_fallen;
+			};
+			properties
+				Dispatch_protocol => Aperiodic;
+	end MotionThread.impl;
+	
+	thread ViewThread		
+	end ViewThread;
+	thread implementation ViewThread.impl
+		calls
+			Main: {
+				view_message_call: subprogram View_message;
+			};
+			properties
+				Dispatch_protocol => Aperiodic;
+	end ViewThread.impl;
+	
+	thread PayThread
 		
+	end PayThread;
+	thread implementation PayThread.impl
+		calls
+			Main: {
+				pressed_button_call: subprogram Pressed_button;
+				pay_deal_call:subprogram Pay_deal;
+				calculate_change:subprogram Calculate_change;
+				
+			};
+			properties
+				Dispatch_protocol => Aperiodic;
+	end PayThread.impl;
+	
+	thread GiveAwayThread
+		
+	end GiveAwayThread;
+	thread implementation GiveAwayThread.impl
+		calls
+			Main: {
+				give_change_call: subprogram Give_change;
+				give_product_call:subprogram Give_product;
+			};
+			properties
+				Dispatch_protocol => Aperiodic;
+	end GiveAwayThread.impl;
+	
+	
+	
+	
+	
+	
+	
+	thread ControlRules
+		features
+			
+			motion_in: in event port;
+			wiadomosc_out:out data port Base_Types::String;
+			wysun_produkt_out:out data port Base_Types::Integer_8;
+			wcisnieto_in:in data port Base_Types::Integer_8;
+			reszta_out:out data port Base_Types::Float;
+			sum_in:in data port Base_Types::Float;
+			
+			
 	end ControlRules;
 	thread implementation ControlRules.impl
 		
@@ -102,6 +256,14 @@ public
 	end ReadSum;
 	thread implementation ReadSum.impl		
 	end ReadSum.impl;
+	
+	thread SendReszta
+		features
+			reszta_in:in data port Base_Types::Float;
+			reszta_out:out data port Base_Types::Float;
+	end SendReszta;
+	thread implementation SendReszta.impl		
+	end SendReszta.impl;
 	
 	thread ReadButtons		
 		features
@@ -153,6 +315,7 @@ public
 	device Liczydlo
 		features
 			sum_of_money_out: out data port Base_Types::Float;
+			reszta_in:in data port Base_Types::Float;
 			bus_access: requires bus access HWConnection;
 	end Liczydlo;
 	device implementation Liczydlo.impl		
