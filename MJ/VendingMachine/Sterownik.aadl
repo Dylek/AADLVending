@@ -38,8 +38,8 @@ public
 		features
 			
 			motion_in: in event port;
-			sum_of_money_in: in data port Base_Types::Float;
-			reszta_out:out data port Base_Types::Float;
+			sum_of_money_in: in data port Base_Types::Integer_16;
+			reszta_out:out data port Base_Types::Integer_16;
 			wiadomosc_out:out data port Base_Types::String;			
 			wysun_produkt_out:out data port Base_Types::Integer_8;
 			wcisnieto_in:in data port Base_Types::Integer_8;
@@ -48,43 +48,33 @@ public
 			
 	end Controller;
 	process implementation Controller.with_threads		
-		subcomponents
-			this_thread_SendMessage:thread SendMessage.impl;
-			this_thread_SendWysun:thread SendWysun.impl;
-			this_thread_ReadSum:thread ReadSum.impl;
-			this_thread_ReadMotion:thread ReadMotion.impl;
-			this_thread_ReadButtons:thread ReadButtons.impl;
-			this_thread_ControlRules:thread ControlRules.impl;
-			this_thread_SendReszta:thread SendReszta.impl;
-			
-			
+		subcomponents		
 			this_thread_motion:thread MotionThread.impl;
 			this_thread_deal:thread PayThread.impl;
-			this_thead_give:thread GiveAwayThread.impl;
-			this_thread_view:thread ViewThread.impl;
-			
-			
+			this_thread_give:thread GiveAwayThread.impl;
+			this_thread_view:thread ViewThread.impl;	
+			this_thread_money:thread MoneyThread.impl;
+			this_thread_buttons:thread ButtonsThread.impl;
 		connections
-						
+			motion_conn:port motion_in->this_thread_motion.motion_in;
+			motion_deal_conn:port this_thread_motion.motion_out->this_thread_deal.motion_in;
+			
+			view_conn:port this_thread_view.message_out->wiadomosc_out;
+			view_deal_conn:port this_thread_deal.message_out->this_thread_view.message_in;
+			
+			give_change_conn: port this_thread_give.reszta_out->reszta_out;
+			give_change_deal: port this_thread_deal.reszta_out->this_thread_give.reszta_in;
+			
+			give_product_conn: port this_thread_give.wysun_out->wysun_produkt_out;
+			give_product_deal_conn:port this_thread_deal.wysun_out->this_thread_give.wysun_in;
+			
+			sum_conn:port sum_of_money_in->this_thread_money.sum_in;
+			sum_deal_conn:port this_thread_money.sum_out->this_thread_deal.sum_in;
+			button_conn:port wcisnieto_in->this_thread_buttons.button_in;
+			button_deal_conn:port this_thread_buttons.button_out->this_thread_deal.button_in;
 			
 			
-			
-			
-			motion_thread_conn:port motion_in->this_thread_ReadMotion.motion_in;
-			message_thread_conn:port this_thread_SendMessage.message_out->wiadomosc_out;
-			wysun_thread_conn:port this_thread_SendWysun.wysun_out->wysun_produkt_out;
-			buttons_thread_conn:port wcisnieto_in->this_thread_ReadButtons.button_in;
-			sum_thread_conn: port sum_of_money_in ->this_thread_ReadSum.sum_in;
-			reszta_thread_conn: port this_thread_SendReszta.reszta_out-> reszta_out;
-			
-			motion_rules: port this_thread_ReadMotion.motion_out->this_thread_ControlRules.motion_in;
-			reszta_rules: port this_thread_ControlRules.reszta_out->this_thread_SendReszta.reszta_in;
-			wiadomosc_rules: port this_thread_ControlRules.wiadomosc_out->this_thread_SendMessage.message_in;
-			sum_rules: port this_thread_ReadSum.sum_out ->this_thread_ControlRules.sum_in;
-			przyciski_rules:port this_thread_ReadButtons.button_out ->  this_thread_ControlRules.wcisnieto_in;
-			wysun_rules: port this_thread_ControlRules.wysun_produkt_out->this_thread_SendWysun.wysun_in;
-			
-	end Controller.with_threads;
+	end  Controller.with_threads;
 	
 	
 	subprogram Give_change		
@@ -92,7 +82,7 @@ public
 	subprogram implementation Give_change.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"aaaa tutaj nazwy funkcji w tym pliku";
+			Source_Name				=>"give_change";
 			source_text				=>("vendingmachine.c");
 	end Give_change.impl;
 	
@@ -102,7 +92,7 @@ public
 	subprogram implementation Give_product.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"give_product";
 			source_text				=>("vendingmachine.c");
 	end Give_product.impl;
 	
@@ -112,7 +102,7 @@ public
 	subprogram implementation Has_Fallen.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"has_fallen";
 			source_text				=>("vendingmachine.c");
 	end Has_Fallen.impl;
 	
@@ -121,7 +111,7 @@ public
 	subprogram implementation View_message.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"view_message";
 			source_text				=>("vendingmachine.c");
 	end View_message.impl;
 	
@@ -130,7 +120,7 @@ public
 	subprogram implementation Pressed_button.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"void pressed_button";
 			source_text				=>("vendingmachine.c");
 	end Pressed_button.impl;
 	
@@ -139,21 +129,23 @@ public
 	subprogram implementation Pay_deal.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"pay_deal";
 			source_text				=>("vendingmachine.c");
 	end Pay_deal.impl;
 	
-		subprogram Calculate_change
-	end Calculate_change;
-	subprogram implementation Calculate_change.impl
+	subprogram Insert_money
+	end Insert_money;
+	subprogram implementation Insert_money.impl
 		properties
 			Source_Language			=>(C);
-			Source_Name				=>"co tutaj";
+			Source_Name				=>"insert_money";
 			source_text				=>("vendingmachine.c");
-	end Calculate_change.impl;
-	
+	end Insert_money.impl;
 	
 	thread MotionThread		
+		features
+			motion_in:in event port;
+			motion_out: out event port;
 	end MotionThread;
 	thread implementation MotionThread.impl
 		calls
@@ -165,6 +157,9 @@ public
 	end MotionThread.impl;
 	
 	thread ViewThread		
+		features
+			message_in:in data port Base_Types::String;
+			message_out:out data port Base_Types::String;
 	end ViewThread;
 	thread implementation ViewThread.impl
 		calls
@@ -176,22 +171,43 @@ public
 	end ViewThread.impl;
 	
 	thread PayThread
-		
+		features
+			motion_in:in event port;
+			button_in:in data port Base_Types::Integer_8;
+			message_out:out data port Base_Types::String;
+		    wysun_out: out data port Base_Types::Integer_8;	
+			reszta_out:out data port Base_Types::Integer_16;
+			sum_in:in data port Base_Types::Integer_16;
 	end PayThread;
 	thread implementation PayThread.impl
 		calls
 			Main: {
-				pressed_button_call: subprogram Pressed_button;
-				pay_deal_call:subprogram Pay_deal;
-				calculate_change:subprogram Calculate_change;
-				
+				pay_deal_call:subprogram Pay_deal;				
 			};
 			properties
 				Dispatch_protocol => Aperiodic;
 	end PayThread.impl;
 	
+	thread MoneyThread
+		features
+			sum_in:in data port Base_Types::Integer_16;
+			sum_out:out data port Base_Types::Integer_16;
+	end MoneyThread;
+	thread implementation MoneyThread.impl
+		calls
+			Main: {
+				insert_money_call:subprogram Insert_money;					
+			};
+			properties
+				Dispatch_protocol => Aperiodic;
+	end MoneyThread.impl;
+	
 	thread GiveAwayThread
-		
+		features
+			wysun_in: in data port Base_Types::Integer_8;
+			reszta_in:in data port Base_Types::Integer_16;	
+			wysun_out: out data port Base_Types::Integer_8;
+			reszta_out:out data port Base_Types::Integer_16;		
 	end GiveAwayThread;
 	thread implementation GiveAwayThread.impl
 		calls
@@ -202,77 +218,19 @@ public
 			properties
 				Dispatch_protocol => Aperiodic;
 	end GiveAwayThread.impl;
-	
-	
-	
-	
-	
-	
-	
-	thread ControlRules
-		features
-			
-			motion_in: in event port;
-			wiadomosc_out:out data port Base_Types::String;
-			wysun_produkt_out:out data port Base_Types::Integer_8;
-			wcisnieto_in:in data port Base_Types::Integer_8;
-			reszta_out:out data port Base_Types::Float;
-			sum_in:in data port Base_Types::Float;
-			
-			
-	end ControlRules;
-	thread implementation ControlRules.impl
-		
-	end ControlRules.impl;
-	
-	thread SendMessage		
-		features
-			message_in:in data port Base_Types::String;
-			message_out:out data port Base_Types::String;
-	end SendMessage;
-	thread implementation SendMessage.impl		
-	end SendMessage.impl;
-	
-	thread SendWysun	
-		features
-		wysun_in: in data port Base_Types::Integer_8;
-		wysun_out: out data port Base_Types::Integer_8;	
-	end SendWysun;
-	thread implementation SendWysun.impl		
-	end SendWysun.impl;
-	
-	thread ReadMotion		
-		features
-			motion_in:in event port;
-			motion_out: out event port;
-	end ReadMotion;
-	thread implementation ReadMotion.impl		
-	end ReadMotion.impl;
-	
-	thread ReadSum		
-		features
-			sum_in:in data port Base_Types::Float;
-			sum_out:out data port Base_Types::Float;
-	end ReadSum;
-	thread implementation ReadSum.impl		
-	end ReadSum.impl;
-	
-	thread SendReszta
-		features
-			reszta_in:in data port Base_Types::Float;
-			reszta_out:out data port Base_Types::Float;
-	end SendReszta;
-	thread implementation SendReszta.impl		
-	end SendReszta.impl;
-	
-	thread ReadButtons		
+	thread ButtonsThread
 		features
 			button_in:in data port Base_Types::Integer_8;
 			button_out:out data port Base_Types::Integer_8;
-			
-	end ReadButtons;
-	thread implementation ReadButtons.impl		
-	end ReadButtons.impl;
+	end ButtonsThread;
+	thread implementation ButtonsThread.impl
+		calls
+			Main:{
+				pressed_button_call: subprogram Pressed_button;				
+			};
+	end ButtonsThread.impl;
+	
+	
 	
 	processor MainProcessor
 		features
@@ -314,8 +272,8 @@ public
 	
 	device Liczydlo
 		features
-			sum_of_money_out: out data port Base_Types::Float;
-			reszta_in:in data port Base_Types::Float;
+			sum_of_money_out: out data port Base_Types::Integer_16;
+			reszta_in:in data port Base_Types::Integer_16;
 			bus_access: requires bus access HWConnection;
 	end Liczydlo;
 	device implementation Liczydlo.impl		
