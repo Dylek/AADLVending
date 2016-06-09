@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.10.6)  8 JUN 2016 22:35
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.10.6)  9 JUN 2016 17:17
 entering extended mode
 **dokumentacjaUML.tex
 (C:\Users\Dylek\Documents\GitHub\SzmucAADL\MJ\Dokumentacja\dokumentacjaUML.tex
@@ -482,21 +482,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 106--107
 File: ./Diagrams/System.png Graphic file (type png)
 
 <use ./Diagrams/System.png>
-Package pdftex.def Info: ./Diagrams/System.png used on input line 113.
+Package pdftex.def Info: ./Diagrams/System.png used on input line 123.
 (pdftex.def)             Requested size: 547.54428pt x 286.56992pt.
 
 <./Diagrams/Controller.png, id=12, 730.73pt x 448.67625pt>
 File: ./Diagrams/Controller.png Graphic file (type png)
 
 <use ./Diagrams/Controller.png>
-Package pdftex.def Info: ./Diagrams/Controller.png used on input line 117.
+Package pdftex.def Info: ./Diagrams/Controller.png used on input line 127.
 (pdftex.def)             Requested size: 438.44138pt x 269.20782pt.
  [1]
 <./Diagrams/Procesor.png, id=20, 258.9675pt x 216.81pt>
 File: ./Diagrams/Procesor.png Graphic file (type png)
 
 <use ./Diagrams/Procesor.png>
-Package pdftex.def Info: ./Diagrams/Procesor.png used on input line 122.
+Package pdftex.def Info: ./Diagrams/Procesor.png used on input line 132.
 (pdftex.def)             Requested size: 155.38168pt x 130.08699pt.
  [2 <C:/Users/Dylek/Documents/GitHub/SzmucAADL/MJ/Dokumentacja/Diagrams/System.
 png (PNG copy)> <C:/Users/Dylek/Documents/GitHub/SzmucAADL/MJ/Dokumentacja/Diag
@@ -504,10 +504,10 @@ rams/Controller.png (PNG copy)>] [3 <C:/Users/Dylek/Documents/GitHub/SzmucAADL/
 MJ/Dokumentacja/Diagrams/Procesor.png (PNG copy)>] (C:\Users\Dylek\Documents\Gi
 tHub\SzmucAADL\MJ\Dokumentacja\dokumentacjaUML.aux) ) 
 Here is how much of TeX's memory you used:
- 3679 strings out of 493921
- 47664 string characters out of 3147282
- 103037 words of memory out of 3000000
- 6920 multiletter control sequences out of 15000+200000
+ 3678 strings out of 493921
+ 47657 string characters out of 3147282
+ 104037 words of memory out of 3000000
+ 6919 multiletter control sequences out of 15000+200000
  16675 words of font info for 38 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  27i,6n,32p,247b,262s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -523,7 +523,7 @@ ts\pk\ljfour\jknappen\ec\dpi600\ecbx2074.pk> <C:\Users\Dylek\AppData\Local\MiKT
 eX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1440.pk> <C:\Users\Dylek\AppData\
 Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\eccc1728.pk><C:/Program Fil
 es/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on dokumentacjaUML.pdf (4 pages, 161459 bytes).
+Output written on dokumentacjaUML.pdf (4 pages, 160491 bytes).
 PDF statistics:
  259 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
